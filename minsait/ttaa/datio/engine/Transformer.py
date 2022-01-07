@@ -11,9 +11,11 @@ class Transformer(Writer):
     def __init__(self, spark: SparkSession):
         self.spark: SparkSession = spark
         df: DataFrame = self.read_input()
+
         df.printSchema()
         df = self.clean_data(df)
-        df = self.column_selection(df)
+        # df = self.column_selection(df)
+        df = self.column_selection_data(df)
 
         # for show 100 records after your transformations and show the DataFrame schema
         df.show(n=100, truncate=False)
@@ -65,6 +67,28 @@ class Transformer(Writer):
             height_cm.column(),
             team_position.column(),
             cat_height_by_position.column()
+        )
+
+        return df
+
+    def column_selection_data(self, df: DataFrame) -> DataFrame:
+        """
+        :param df: is a DataFrame with players information
+        :return: a DataFrame with ten existing columns and one new column...
+        """
+
+        df = df.select(
+            short_name.column(),
+            long_name.column(),
+            age.column(),
+            height_cm.column(),
+            weight_kg.column(),
+            nationality.column(),
+            club_name.column(),
+            overall.column(),
+            potential.column(),
+            team_position.column(),
+            potential_vs_overall.build(),
         )
 
         return df

@@ -1,7 +1,8 @@
 from pyspark.sql import Column, Window, WindowSpec
 from pyspark.sql import functions as f
 from minsait.ttaa.datio.common.naming.Field import Field
-from minsait.ttaa.datio.common.naming.PlayerInput import team_position, height_cm, short_name, age
+from minsait.ttaa.datio.common.naming.PlayerInput import team_position, height_cm, short_name, age, potential, overall, \
+    nationality
 
 
 class CatHeightByPosition(Field):
@@ -18,6 +19,13 @@ class CatHeightByPosition(Field):
             .alias(self.name)
 
         return built_column
+
+
+class PotentialVsOverall(Field):
+    name = "potential_vs_overall"
+
+    def build(self) -> Column:
+        return division_rule(potential.column(), overall.column()).alias(self.name)
 
 
 class FieldOne(Field):
@@ -38,6 +46,11 @@ def magic_rule(col1: Column, col2: Column) -> Column:
     return f.upper(f.concat(col1, col2))
 
 
+def division_rule(col1: Column, col2: Column) -> Column:
+    return col1 / col2
+
+
 cat_height_by_position = CatHeightByPosition()
+potential_vs_overall = PotentialVsOverall()
 field_one = FieldOne()
 field_two = FieldTwo()
