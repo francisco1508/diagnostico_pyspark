@@ -15,10 +15,15 @@ class Transformer(Writer):
         df.printSchema()
         df = self.clean_data(df)
         # df = self.column_selection(df)
+        print("""
+        PRINT DATA
+        """)
         df = self.column_selection_data(df)
-
+        print("""
+                END PRINT DATA
+                """)
         # for show 100 records after your transformations and show the DataFrame schema
-        df.show(n=100, truncate=False)
+        df.show(n=100, truncate=True)
         df.printSchema()
 
         # Uncomment when you want write your final output
@@ -74,7 +79,7 @@ class Transformer(Writer):
     def column_selection_data(self, df: DataFrame) -> DataFrame:
         """
         :param df: is a DataFrame with players information
-        :return: a DataFrame with ten existing columns and one new column...
+        :return: a DataFrame with ten existing columns and two new columns...
         """
 
         df = df.select(
@@ -88,6 +93,7 @@ class Transformer(Writer):
             overall.column(),
             potential.column(),
             team_position.column(),
+            player_cat.build(),
             potential_vs_overall.build(),
         )
 
